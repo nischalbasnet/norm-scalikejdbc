@@ -20,7 +20,7 @@ class NormModel extends scala.annotation.StaticAnnotation
 
     val allParams = cls.ctor.paramss.flatten
     val insertSql = SQLGeneratorMacro.generateInsertSQL(allParams)
-    val updateSetters = GenericMacro.createUpdateSetters(allParams)
+    val updateSetters = GenericMacro.generateUpdateSetters(allParams)
     val updateForm = q"""private val _updateForm = ${Term.Name(cls.name.value)}.Update()"""
     val updateSql = q"def updateSQL() = _updateForm.updateSQL()"
 

@@ -6,13 +6,25 @@ import scala.meta._
 object GenericMacro
 {
 
-  def createApply(name: Type.Name, paramss: Seq[Seq[Term.Param]]): Defn.Def =
+  def generateToMap(params: Seq[Term.Param]): Defn.Def =
+  {
+    val namesToValues: Seq[Term.Tuple] = params.map { param =>
+      val syntax = s"${param.name.value}"
+      val value = Term.Name(param.name.value)
+      q"""($syntax, $value)"""
+    }
+    val toMapImpl: Term = q"Map(..$namesToValues)"
+
+    q"""def toMap: Map[String, Any] = $toMapImpl"""
+  }
+
+  def generateApply(name: Type.Name, paramss: Seq[Seq[Term.Param]]): Defn.Def =
   {
     val args = paramss.map(_.map(param => Term.Name(param.name.value)))
     q"""def apply(...$paramss): $name = new ${Ctor.Ref.Name(name.value)}(...$args)"""
   }
 
-  def createUpdateSetters(params: Seq[Term.Param]): Seq[Defn.Def] =
+  def generateUpdateSetters(params: Seq[Term.Param]): Seq[Defn.Def] =
   {
     import scala.collection.mutable
     val paramsWithAnnotation = for {
@@ -31,11 +43,11 @@ object GenericMacro
       }
     } yield newParam
 
-    val updateSetters = paramsWithAnnotation.map(p => createUpdateSetter(p._1, p._2))
+    val updateSetters = paramsWithAnnotation.map(p => generateUpdateSetter(p._1, p._2))
     updateSetters
   }
 
-  def createUpdateSetter(param: Term.Param, nonOptionParam: Term.Param): Defn.Def =
+  def generateUpdateSetter(param: Term.Param, nonOptionParam: Term.Param): Defn.Def =
   {
     val camelCaseParam = param.name.value.split("_")
       .map(_.capitalize)

@@ -1,6 +1,6 @@
 package examples
 
-import com.nischal.{INormModel, NormModel, UpdateMap, update}
+import com.nischal._
 import scalikejdbc.com.nischal.ClassToMap
 
 object MyApp
@@ -14,8 +14,7 @@ object MyApp
   {
     val nischal = User("Nischal", None, "Basnet", 29)
     println("Hello Scala.meta macros! Scalikejdbc Test")
-    println(nischal.insertSQL)
-
+    println(nischal.insertSQL())
 
     val nischalup = UserUpdate(None, None, Some("Bas"), Some(19))
     println(nischalup.updateSQL(Seq("first_name")))
@@ -40,6 +39,7 @@ trait ClassExtensions
 }
 
 @ClassToMap
+@InsertMap
 case class User(
   first_name: String,
   middle_name: Option[String],
@@ -70,5 +70,4 @@ case class Person(
 
 object Person
 {
-  val t = ""
 }
