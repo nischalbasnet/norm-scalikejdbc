@@ -2,6 +2,8 @@
 
 ### Example
 ```scala
+import com.nischal.macros.UpdateMap
+
 @UpdateMap
 case class UserUpdate(
   first_name: Option[String],
@@ -36,6 +38,9 @@ age: Option[Int]) {
 }
 ```
 ```scala
+import com.nischal.macros.NormModel
+import com.nischal.norm.INormModel
+
 @NormModel
 case class Person(
   id: String,

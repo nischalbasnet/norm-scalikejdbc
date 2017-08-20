@@ -39,7 +39,7 @@ trait ClassExtensions
 }
 
 @ClassToMap
-@InsertMap
+@InsertMap(true)
 case class User(
   first_name: String,
   middle_name: Option[String],

@@ -4,17 +4,24 @@ import scala.meta._
 
 class update extends scala.annotation.StaticAnnotation
 
-class NormModel extends scala.annotation.StaticAnnotation
+class NormModel(debug: Boolean = false) extends scala.annotation.StaticAnnotation
 {
   inline def apply(defn: Any): Any = meta {
     import scala.collection.immutable.Seq
+    //get the arguments
+    val debug = this match {
+      // The argument needs to be a literal like `1` or a string like `"foobar"`.
+      case q"new $_(${Lit.Boolean(ap)})" => ap
+      case _ => false // default value
+    }
+
     val (cls, companion) = defn match {
       case q"${cls: Defn.Class}; ${companion: Defn.Object}" =>
         (cls, companion)
       case cls: Defn.Class =>
         (cls, q"object ${Term.Name(cls.name.value)}")
       case _ =>
-        println(defn.structure)
+        Helper.debug(defn.structure)
         abort("@NormModel must annotate a class.")
     }
 
@@ -34,9 +41,12 @@ class NormModel extends scala.annotation.StaticAnnotation
         stats = Some(companion.templ.stats.getOrElse(Nil) ++ ormModels)
       )
     )
-    println(newClass)
-    println(newCompanion)
-    println("End from orm macro")
+
+    if(debug){
+      Helper.debug(newClass)
+      Helper.debug(newCompanion)
+      Helper.debug("End from orm macro")
+    }
 
     Term.Block(Seq(newClass, newCompanion))
   }
