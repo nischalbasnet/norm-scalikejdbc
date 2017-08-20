@@ -1,2 +1,15 @@
-*.class
-*.log
+bin/
+/db
+.eclipse
+/lib/
+/logs/
+/modules
+target
+tmp/
+test-result
+server.pid
+*.eml
+/dist/
+.cache
+.idea/
+libexec/
