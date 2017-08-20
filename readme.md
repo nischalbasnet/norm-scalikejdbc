@@ -101,7 +101,7 @@ object Person {
   var last_name: Option[String] = None, 
   var email: Option[String] = None, 
   var age: Option[Int] = None
-  ) extends com.nischal.INormModelUpdater {
+  ) {
     private val _nullValues: _root_.scala.collection.mutable.ListBuffer[String] = _root_.scala.collection.mutable.ListBuffer()
     
     def setNullValue(value: String) = _nullValues.append(value)

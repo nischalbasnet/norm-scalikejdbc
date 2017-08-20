@@ -1,4 +1,4 @@
-package com.nischal
+package com.nischal.macros
 
 import scala.collection.immutable.Seq
 import scala.meta._
@@ -94,7 +94,7 @@ object SQLGeneratorMacro
           case "Update" =>
             val classTemplate = generateUpdateSQL(classParams, Some("_nullValues"))
 
-            q"""case class $className(..$classParams) extends com.nischal.INormModelUpdater{
+            q"""case class $className(..$classParams) extends com.nischal.norm.INormModelUpdater{
                 private val _nullValues: _root_.scala.collection.mutable.ListBuffer[String] = _root_.scala.collection.mutable.ListBuffer()
                 def setNullValue(value: String) = _nullValues.append(value)
                 def setNullValue(values: Seq[String]) = _nullValues.appendAll(values)

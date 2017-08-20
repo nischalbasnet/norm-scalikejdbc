@@ -1,7 +1,7 @@
 package examples
 
-import com.nischal._
-import scalikejdbc.com.nischal.ClassToMap
+import com.nischal.macros._
+import com.nischal.norm.INormModel
 
 object MyApp
 {

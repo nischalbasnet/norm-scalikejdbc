@@ -1,4 +1,4 @@
-package com.nischal
+package com.nischal.macros
 
 import scala.meta._
 

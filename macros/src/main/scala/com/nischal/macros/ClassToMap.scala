@@ -1,10 +1,7 @@
-package scalikejdbc.com.nischal
+package com.nischal.macros
 
-import com.nischal.GenericMacro
-
-import scala.collection.immutable.{Map, Seq}
+import scala.collection.immutable.Seq
 import scala.meta._
-import scalikejdbc._
 
 /**
   * Created by nbasnet on 6/24/17.
