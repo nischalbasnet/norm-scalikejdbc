@@ -18,7 +18,9 @@ middle_name: Option[String],
 last_name: Option[String],
 age: Option[Int]) {
 
-  def updateSQL(nullables: Seq[String] = Seq.empty): _root_.scala.collection.immutable.Map[String, scalikejdbc.SQLSyntax] = {
+  def updateSQL(
+    nullables: Seq[String] = Seq.empty
+  ): _root_.scala.collection.immutable.Map[String, scalikejdbc.SQLSyntax] = {
     val updateMap = _root_.scala.collection.mutable.Map[String, scalikejdbc.SQLSyntax]()
     if (first_name.isDefined) updateMap.put("first_name", scalikejdbc.nischalmod.SQLBinder.bind(first_name.get)) 
     else if (nullables.contains("first_name")) updateMap.put("first_name", scalikejdbc.nischalmod.SQLBinder.bind(null))
@@ -89,6 +91,39 @@ id: String,
   def setAge(age: Int, setNull: Boolean = false) = {
     if (setNull) _updateForm.setNullValue("age") else _updateForm.age = Some(age)
     this
+  }
+}
+
+object Person {
+  case class Update(
+  var first_name: Option[String] = None, 
+  var middle_name: Option[String] = None, 
+  var last_name: Option[String] = None, 
+  var email: Option[String] = None, 
+  var age: Option[Int] = None
+  ) extends com.nischal.INormModelUpdater {
+    private val _nullValues: _root_.scala.collection.mutable.ListBuffer[String] = _root_.scala.collection.mutable.ListBuffer()
+    
+    def setNullValue(value: String) = _nullValues.append(value)
+    def setNullValue(values: Seq[String]) = _nullValues.appendAll(values)
+    
+    def updateSQL(
+      nullables: Seq[String] = _nullValues
+    ): _root_.scala.collection.immutable.Map[String, scalikejdbc.SQLSyntax] = {
+      val updateMap = _root_.scala.collection.mutable.Map[String, scalikejdbc.SQLSyntax]()
+      if (first_name.isDefined) updateMap.put("first_name", scalikejdbc.nischalmod.SQLBinder.bind(first_name.get)) 
+      else if (nullables.contains("first_name")) updateMap.put("first_name", scalikejdbc.nischalmod.SQLBinder.bind(null))
+      if (middle_name.isDefined) updateMap.put("middle_name", scalikejdbc.nischalmod.SQLBinder.bind(middle_name.get)) 
+      else if (nullables.contains("middle_name")) updateMap.put("middle_name", scalikejdbc.nischalmod.SQLBinder.bind(null))
+      if (last_name.isDefined) updateMap.put("last_name", scalikejdbc.nischalmod.SQLBinder.bind(last_name.get)) 
+      else if (nullables.contains("last_name")) updateMap.put("last_name", scalikejdbc.nischalmod.SQLBinder.bind(null))
+      if (email.isDefined) updateMap.put("email", scalikejdbc.nischalmod.SQLBinder.bind(email.get)) 
+      else if (nullables.contains("email")) updateMap.put("email", scalikejdbc.nischalmod.SQLBinder.bind(null))
+      if (age.isDefined) updateMap.put("age", scalikejdbc.nischalmod.SQLBinder.bind(age.get)) 
+      else if (nullables.contains("age")) updateMap.put("age", scalikejdbc.nischalmod.SQLBinder.bind(null))
+      
+      updateMap.toMap
+    }
   }
 }
 ```
