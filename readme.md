@@ -12,7 +12,7 @@ case class UserUpdate(
   age: Option[Int]
 )
 ```
-Produces:
+Expands To:
 ```scala
 case class UserUpdate(
 first_name: Option[String],
@@ -51,7 +51,7 @@ case class Person(
   @update age: Option[Int]
 ) extends INormModel
 ```
-Produces
+Expands To
 ```scala
 case class Person(
 id: String,
